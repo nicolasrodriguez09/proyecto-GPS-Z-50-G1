@@ -14,43 +14,7 @@ Desarrollar, en un plazo de 3 meses, una plataforma web de alquiler de objetos p
 
 ---
 
-## Problemática
-Actualmente, muchas transacciones de alquiler informal de objetos se realizan sin herramientas digitales que permitan llevar control sobre las condiciones del servicio, los pagos, las evidencias de entrega y devolución, o la identidad de las partes involucradas.
 
-Esto puede generar problemas como:
-
-- falta de trazabilidad en el proceso de alquiler,
-- incumplimientos por parte de arrendadores o arrendatarios,
-- ausencia de evidencia ante daños o disputas,
-- dificultad para gestionar depósitos de garantía,
-- poca confianza entre los usuarios,
-- y desorganización en el seguimiento de reservas y transacciones.
-
-Frente a esta necesidad, se propone una solución digital que centralice y controle todo el flujo del alquiler.
-
----
-
-## Alcance del sistema
-La plataforma contempla funcionalidades para:
-
-- registro e inicio de sesión de usuarios,
-- gestión de roles: arrendador, arrendatario y administrador,
-- validación de identidad con foto personal y documento,
-- publicación y administración de productos o servicios de alquiler,
-- visualización de catálogo con filtros de búsqueda,
-- consulta de disponibilidad e inventario en tiempo real,
-- motor de reservas,
-- aceptación de términos y condiciones,
-- gestión lógica de pagos,
-- retención y devolución de depósitos de garantía,
-- aplicación de comisión interna del 3% por transacción,
-- evidencias de entrega y devolución mediante fotos y checklists,
-- historial de alquileres y trazabilidad de procesos,
-- sistema de reclamos o quejas,
-- sistema de calificaciones de 1 a 5 estrellas,
-- panel administrativo para validaciones, atención de reclamos y control de transacciones.
-
----
 
 ## Roles del sistema
 
