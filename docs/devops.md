@@ -8,25 +8,31 @@
 cp .env.docker.example .env.docker
 ```
 
-2. Genera una clave de aplicacion y pegala en `APP_KEY` dentro de `.env.docker`:
-
-```bash
-php artisan key:generate --show
-```
-
-3. Levanta la aplicacion y MySQL:
+2. Levanta la aplicacion y MySQL (la app iniciara temporalmente sin clave):
 
 ```bash
 docker compose --env-file .env.docker up --build -d
 ```
 
-4. Ejecuta las migraciones:
+3. Genera una clave de aplicacion dentro del contenedor y pegala en `APP_KEY` dentro de `.env.docker`:
+
+```bash
+docker compose --env-file .env.docker exec app php artisan key:generate --show
+```
+
+4. Reinicia los contenedores para que tomen la nueva clave:
+
+```bash
+docker compose --env-file .env.docker restart
+```
+
+5. Ejecuta las migraciones:
 
 ```bash
 docker compose --env-file .env.docker exec app php artisan migrate --force
 ```
 
-5. La aplicacion quedara disponible en `http://localhost:8000` y el health check de Laravel en `http://localhost:8000/up`.
+6. La aplicacion quedara disponible en `http://localhost:8000` y el health check de Laravel en `http://localhost:8000/up`.
 
 ## Estructura agregada
 
