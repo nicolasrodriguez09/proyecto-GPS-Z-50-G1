@@ -10,6 +10,7 @@ x-app-base: &app-base
       condition: service_healthy
   restart: unless-stopped
   volumes:
+    - .:/var/www/html
     - app_storage:/var/www/html/storage
 
 services:
