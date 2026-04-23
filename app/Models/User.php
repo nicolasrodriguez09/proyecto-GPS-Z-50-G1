@@ -12,6 +12,11 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    public const IDENTITY_VERIFICATION_NOT_SUBMITTED = 'not_submitted';
+    public const IDENTITY_VERIFICATION_PENDING = 'pending';
+    public const IDENTITY_VERIFICATION_APPROVED = 'approved';
+    public const IDENTITY_VERIFICATION_REJECTED = 'rejected';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -23,6 +28,9 @@ class User extends Authenticatable
         'password',
         'personal_photo_path',
         'identity_document_path',
+        'identity_verification_status',
+        'identity_verification_notes',
+        'identity_verification_reviewed_at',
     ];
 
     /**
@@ -45,6 +53,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'identity_verification_reviewed_at' => 'datetime',
         ];
     }
 }
