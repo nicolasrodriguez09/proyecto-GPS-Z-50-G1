@@ -57,6 +57,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
+// SOLO PARA PREVIEW — borrar después
+Route::get('/preview/reset-password', function () {
+    return view('auth.reset-password', [
+        'request' => request()
+    ]);
+});
 require __DIR__.'/auth.php';
 
