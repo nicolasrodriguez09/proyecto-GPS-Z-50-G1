@@ -1,11 +1,17 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ArrendatarioController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    if (auth()->check()) {
-        $user = auth()->user();
+    if (Auth::check()) {
+        $user = Auth::user();
+
+        if (!$user) {
+            return view('home');
+        }
 
         if ($user->role === 'admin') {
             return redirect('/admin');
@@ -23,7 +29,11 @@ Route::get('/', function () {
 
 
 Route::get('/dashboard', function () {
-    $user = auth()->user();
+    $user = Auth::user();
+
+    if (!$user) {
+        return redirect('/');
+    }
 
     if ($user->role === 'admin') {
         return redirect('/admin');
@@ -46,9 +56,7 @@ Route::middleware(['auth', 'role:arrendador'])->get('/arrendador', function () {
     return view('arrendador');
 });
 
-Route::middleware(['auth', 'role:arrendatario'])->get('/arrendatario', function () {
-    return view('arrendatario');
-});
+Route::middleware(['auth', 'role:arrendatario'])->get('/arrendatario', [ArrendatarioController::class, 'index']);
 
 
 // PERFIL 
