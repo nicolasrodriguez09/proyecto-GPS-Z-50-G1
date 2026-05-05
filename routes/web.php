@@ -2,8 +2,15 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ArrendatarioController;
+use App\Http\Controllers\IdentityEvidenceController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+// Rutas de Identity Evidence
+// Nota: Se cambió la ruta '/' de Identity a '/identity-evidence/create' para evitar conflicto con tu redirección de roles.
+//Eliminar las dos rutas en caso de que el merge siga dando conflicto.
+Route::get('/identity-evidence/create', [IdentityEvidenceController::class, 'create'])->name('identity-evidence.create');
+Route::post('/identity-evidence', [IdentityEvidenceController::class, 'store'])->name('identity-evidence.store');
 
 Route::get('/', function () {
     if (Auth::check()) {
