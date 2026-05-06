@@ -12,9 +12,17 @@ class IdentityEvidenceUploadTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Desactiva la verificación de seguridad CSRF específica para evitar el error 419,
+        // pero mantiene vivas las sesiones para no romper las vistas.
+        $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
+    }
+
     public function test_the_identity_evidence_form_is_accessible(): void
     {
-        $response = $this->get('/');
+        $response = $this->get(route('identity-evidence.create'));
 
         $response->assertOk();
         $response->assertSee('Carga tus evidencias para validar tu perfil.');
@@ -23,9 +31,9 @@ class IdentityEvidenceUploadTest extends TestCase
 
     public function test_required_fields_are_validated_before_submitting(): void
     {
-        $response = $this->from('/')->post(route('identity-evidence.store'), []);
+        $response = $this->from(route('identity-evidence.create'))->post(route('identity-evidence.store'), []);
 
-        $response->assertRedirect('/');
+        $response->assertRedirect(route('identity-evidence.create'));
         $response->assertSessionHasErrors([
             'name',
             'email',
@@ -38,14 +46,14 @@ class IdentityEvidenceUploadTest extends TestCase
     {
         Storage::fake('public');
 
-        $response = $this->from('/')->post(route('identity-evidence.store'), [
+        $response = $this->from(route('identity-evidence.create'))->post(route('identity-evidence.store'), [
             'name' => 'Laura Martinez',
             'email' => 'laura@example.com',
             'personal_photo' => UploadedFile::fake()->create('foto.pdf', 50, 'application/pdf'),
             'identity_document' => UploadedFile::fake()->create('documento.gif', 50, 'image/gif'),
         ]);
 
-        $response->assertRedirect('/');
+        $response->assertRedirect(route('identity-evidence.create'));
         $response->assertSessionHasErrors([
             'personal_photo',
             'identity_document',
@@ -56,8 +64,8 @@ class IdentityEvidenceUploadTest extends TestCase
     {
         Storage::fake('public');
 
-        $personalPhoto = UploadedFile::fake()->image('personal-photo.jpg');
-        $identityDocument = UploadedFile::fake()->image('identity-document.png');
+        $personalPhoto = UploadedFile::fake()->create('personal-photo.jpg', 50, 'image/jpeg');
+        $identityDocument = UploadedFile::fake()->create('identity-document.png', 50, 'image/png');
 
         $response = $this->post(route('identity-evidence.store'), [
             'name' => 'Laura Martinez',
