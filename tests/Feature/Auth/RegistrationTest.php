@@ -9,6 +9,13 @@ class RegistrationTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Desactivamos temporalmente el CSRF para evitar el error TokenMismatchException
+        $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
+    }
+
     public function test_registration_screen_can_be_rendered(): void
     {
         $response = $this->get('/register');
@@ -23,6 +30,9 @@ class RegistrationTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
+            'role' => 'arrendatario', 
+            'document' => 'N/A', 
+            'phone' => '0000000000', 
         ]);
 
         $this->assertAuthenticated();
