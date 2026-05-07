@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ArrendatarioController;
 use App\Http\Controllers\IdentityEvidenceController;
@@ -64,6 +65,31 @@ Route::middleware(['auth', 'role:arrendador'])->get('/arrendador', function () {
 
 Route::middleware(['auth', 'role:arrendatario'])->get('/arrendatario', [ArrendatarioController::class, 'index']);
 
+Route::middleware(['auth', 'role:arrendador'])->group(function () {
+
+    Route::get('/products/create', function () {
+        return view('products.create');
+    })->name('products.create');
+
+    Route::post('/products', [ProductController::class, 'store'])
+        ->name('products.store');
+
+    Route::get('/mis-productos', [ProductController::class, 'index'])
+        ->name('products.index');
+    Route::get('/products/{product}/edit',
+    [ProductController::class, 'edit'])
+        ->name('products.edit');
+
+    Route::put('/products/{product}',
+    [ProductController::class, 'update'])
+        ->name('products.update');
+
+    Route::delete('/products/{product}',
+    [ProductController::class, 'destroy'])
+        ->name('products.destroy');
+
+
+});
 
 // PERFIL 
 Route::middleware('auth')->group(function () {
