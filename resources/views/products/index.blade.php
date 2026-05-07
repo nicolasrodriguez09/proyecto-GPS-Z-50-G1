@@ -32,10 +32,11 @@
                     <p>
                         Depósito: ${{ $product->deposit }}
                     </p>
-
                     <p>
-                        Ubicación: {{ $product->location }}
+                        {{ $product->city }},
+                        {{ $product->department }}
                     </p>
+
                     <div class="mt-4 flex gap-2">
 
     <a href="{{ route('products.edit', $product) }}"

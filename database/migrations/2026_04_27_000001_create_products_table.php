@@ -4,35 +4,42 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
+
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
+            $table->foreignId('user_id')
+                ->constrained()
+                ->onDelete('cascade');
 
             $table->string('name');
+
+            $table->text('description');
+
             $table->decimal('price', 10, 2);
-            $table->string('location');
 
-            $table->date('available_from');
-            $table->date('available_until')->nullable();
+            $table->decimal('deposit', 10, 2)
+                ->nullable();
 
-            $table->string('category')->nullable();
-            $table->string('status')->default('active');
+            $table->string('image')
+                ->nullable();
+
+            $table->boolean('available')
+                ->default(true);
+
+            $table->string('department')
+                ->default('Valle del Cauca');
+
+            $table->string('city');
 
             $table->timestamps();
-
-            $table->index('name');
-            $table->index('category');
-            $table->index('price');
-            $table->index('location');
-            $table->index('available_from');
-            $table->index('available_until');
-            $table->index('status');
         });
     }
 

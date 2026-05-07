@@ -7,21 +7,31 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    public function create()
+    {
+        return view('products.create');
+    }
+
     public function store(Request $request)
     {
+       
+
         $request->validate([
             'name' => 'required',
             'description' => 'required',
             'price' => 'required|numeric',
             'deposit' => 'nullable|numeric',
             'image' => 'nullable|image',
-            'location' => 'required',
+            'department' => 'required',
+            'city' => 'required',
         ]);
 
         $imagePath = null;
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
+
+            $imagePath = $request->file('image')
+                ->store('products', 'public');
         }
 
         Product::create([
@@ -30,76 +40,80 @@ class ProductController extends Controller
             'price' => $request->price,
             'deposit' => $request->deposit,
             'image' => $imagePath,
-            'location' => $request->location,
             'available' => true,
+            'department' => $request->department,
+            'city' => $request->city,
             'user_id' => auth()->id(),
         ]);
 
-        return redirect()->back()->with('success', 'Producto publicado');
+        return redirect()->back()
+            ->with('success', 'Producto publicado');
     }
+
     public function index()
-{
-    $products = Product::where('user_id', auth()->id())->get();
+    {
+        $products = Product::where('user_id', auth()->id())
+            ->get();
 
-    return view('products.index', compact('products'));
-}
-
-public function edit(Product $product)
-{
-    if ($product->user_id !== auth()->id()) {
-        abort(403);
+        return view('products.index', compact('products'));
     }
 
-    return view('products.edit', compact('product'));
-}
+    public function edit(Product $product)
+    {
+        if ($product->user_id !== auth()->id()) {
+            abort(403);
+        }
 
-public function update(Request $request, Product $product)
-{
-    if ($product->user_id !== auth()->id()) {
-        abort(403);
+        return view('products.edit', compact('product'));
     }
 
-    $request->validate([
-        'name' => 'required',
-        'description' => 'required',
-        'price' => 'required|numeric',
-        'deposit' => 'nullable|numeric',
-        'location' => 'required',
-    ]);
+    public function update(Request $request, Product $product)
+    {
+        if ($product->user_id !== auth()->id()) {
+            abort(403);
+        }
 
-    if ($request->hasFile('image')) {
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required|numeric',
+            'deposit' => 'nullable|numeric',
+            'department' => 'required',
+            'city' => 'required',
+        ]);
 
-        $imagePath = $request->file('image')
-            ->store('products', 'public');
+        if ($request->hasFile('image')) {
 
-        $product->image = $imagePath;
+            $imagePath = $request->file('image')
+                ->store('products', 'public');
+
+            $product->image = $imagePath;
+        }
+
+        $product->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'deposit' => $request->deposit,
+            'department' => $request->department,
+            'city' => $request->city,
+        ]);
+
+        $product->save();
+
+        return redirect()->route('products.index')
+            ->with('success', 'Producto actualizado');
     }
 
-    $product->update([
-        'name' => $request->name,
-        'description' => $request->description,
-        'price' => $request->price,
-        'deposit' => $request->deposit,
-        'location' => $request->location,
-    ]);
+    public function destroy(Product $product)
+    {
+        if ($product->user_id !== auth()->id()) {
+            abort(403);
+        }
 
-    $product->save();
+        $product->delete();
 
-    return redirect()->route('products.index')
-        ->with('success', 'Producto actualizado');
-}
-
-public function destroy(Product $product)
-{
-    if ($product->user_id !== auth()->id()) {
-        abort(403);
+        return redirect()->back()
+            ->with('success', 'Producto eliminado');
     }
-
-    $product->delete();
-
-    return redirect()->back()
-        ->with('success', 'Producto eliminado');
 }
-
-}
-

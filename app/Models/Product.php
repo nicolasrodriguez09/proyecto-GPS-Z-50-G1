@@ -2,55 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'user_id',
         'name',
+        'description',
         'price',
-        'location',
-        'available_from',
-        'available_until',
-        'category',
-        'status',
+        'deposit',
+        'image',
+        'available',
+        'department',
+        'city',
+        'user_id',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'price' => 'decimal:2',
-            'available_from' => 'date',
-            'available_until' => 'date',
-        ];
-    }
-
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
-use Illuminate\Database\Eloquent\Model;
-
-class Product extends Model
-{
-   public function user()
-{
-    return $this->belongsTo(User::class);
-}
-protected $fillable = [
-    'name',
-    'description',
-    'price',
-    'deposit',
-    'image',
-    'available',
-    'location',
-    'user_id'
-];
-
 }

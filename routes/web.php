@@ -67,29 +67,31 @@ Route::middleware(['auth', 'role:arrendatario'])->get('/arrendatario', [Arrendat
 
 Route::middleware(['auth', 'role:arrendador'])->group(function () {
 
-    Route::get('/products/create', function () {
-        return view('products.create');
-    })->name('products.create');
+    Route::get('/products/create',
+        [ProductController::class, 'create'])
+        ->name('products.create');
 
-    Route::post('/products', [ProductController::class, 'store'])
+    Route::post('/products',
+        [ProductController::class, 'store'])
         ->name('products.store');
 
-    Route::get('/mis-productos', [ProductController::class, 'index'])
+    Route::get('/mis-productos',
+        [ProductController::class, 'index'])
         ->name('products.index');
+
     Route::get('/products/{product}/edit',
-    [ProductController::class, 'edit'])
+        [ProductController::class, 'edit'])
         ->name('products.edit');
 
     Route::put('/products/{product}',
-    [ProductController::class, 'update'])
+        [ProductController::class, 'update'])
         ->name('products.update');
 
     Route::delete('/products/{product}',
-    [ProductController::class, 'destroy'])
+        [ProductController::class, 'destroy'])
         ->name('products.destroy');
-
-
 });
+
 
 // PERFIL 
 Route::middleware('auth')->group(function () {
