@@ -2,11 +2,23 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ArrendatarioController;
+use App\Http\Controllers\IdentityEvidenceController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+// Rutas de Identity Evidence
+// Nota: Se cambió la ruta '/' de Identity a '/identity-evidence/create' para evitar conflicto con tu redirección de roles.
+Route::get('/identity-evidence/create', [IdentityEvidenceController::class, 'create'])->name('identity-evidence.create');
+Route::post('/identity-evidence', [IdentityEvidenceController::class, 'store'])->name('identity-evidence.store');
+
 Route::get('/', function () {
-    if (auth()->check()) {
-        $user = auth()->user();
+    if (Auth::check()) {
+        $user = Auth::user();
+
+        if (!$user) {
+            return view('home');
+        }
 
         if ($user->role === 'admin') {
             return redirect('/admin');
@@ -24,7 +36,11 @@ Route::get('/', function () {
 
 
 Route::get('/dashboard', function () {
-    $user = auth()->user();
+    $user = Auth::user();
+
+    if (!$user) {
+        return redirect('/');
+    }
 
     if ($user->role === 'admin') {
         return redirect('/admin');
@@ -47,9 +63,7 @@ Route::middleware(['auth', 'role:arrendador'])->get('/arrendador', function () {
     return view('arrendador');
 });
 
-Route::middleware(['auth', 'role:arrendatario'])->get('/arrendatario', function () {
-    return view('arrendatario');
-});
+Route::middleware(['auth', 'role:arrendatario'])->get('/arrendatario', [ArrendatarioController::class, 'index']);
 
 Route::middleware(['auth', 'role:arrendador'])->group(function () {
 
@@ -90,4 +104,3 @@ Route::get('/preview/reset-password', function () {
     ]);
 });
 require __DIR__.'/auth.php';
-
