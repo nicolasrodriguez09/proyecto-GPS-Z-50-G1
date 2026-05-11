@@ -11,73 +11,63 @@ class ArrendatarioController extends Controller
     public function index(Request $request): View
     {
         $validated = validator($request->query(), [
-            'search' => ['nullable', 'string', 'max:100'],
+            'search'    => ['nullable', 'string', 'max:100'],
             'min_price' => ['nullable', 'numeric', 'min:0'],
-            'max_price' => ['nullable', 'numeric', 'min:0', 'gte:min_price'],
-            'availability_date' => ['nullable', 'date'],
-            'location' => ['nullable', 'string', 'max:100'],
-            'category' => ['nullable', 'string', 'max:50'],
+            'max_price' => ['nullable', 'numeric', 'min:0'],
+            'location'  => ['nullable', 'string', 'max:100'],
+            'sort'      => ['nullable', 'string', 'in:recent,price_asc,price_desc'],
         ])->validate();
 
-        $query = Product::query()->where('status', 'active');
+        $query = Product::query()->where('available', true);
 
+        // Filtro por nombre
         if (!empty($validated['search'])) {
             $term = $validated['search'];
-            $query->where(function ($q) use ($term) {
-                $q->where('name', 'like', "%{$term}%");
-            });
+            $query->where('name', 'like', "%{$term}%");
         }
 
-        if (array_key_exists('min_price', $validated) && $validated['min_price'] !== null) {
+        // Filtro precio mínimo
+        if (!empty($validated['min_price'])) {
             $query->where('price', '>=', $validated['min_price']);
         }
 
-        if (array_key_exists('max_price', $validated) && $validated['max_price'] !== null) {
+        // Filtro precio máximo
+        if (!empty($validated['max_price'])) {
             $query->where('price', '<=', $validated['max_price']);
         }
 
+        // Filtro ubicación (city o department)
         if (!empty($validated['location'])) {
             $location = $validated['location'];
-            $query->where('location', 'like', "%{$location}%");
+            $query->where(function ($q) use ($location) {
+                $q->where('city', 'like', "%{$location}%")
+                  ->orWhere('department', 'like', "%{$location}%");
+            });
         }
 
-        if (!empty($validated['category'])) {
-            $category = $validated['category'];
-            $query->where('category', $category);
-        }
-
-        if (!empty($validated['availability_date'])) {
-            $date = $validated['availability_date'];
-
-            $query
-                ->whereDate('available_from', '<=', $date)
-                ->where(function ($q) use ($date) {
-                    $q->whereNull('available_until')
-                        ->orWhereDate('available_until', '>=', $date);
-                });
+        // Ordenamiento
+        $sort = $validated['sort'] ?? 'recent';
+        if ($sort === 'price_asc') {
+            $query->orderBy('price', 'asc');
+        } elseif ($sort === 'price_desc') {
+            $query->orderBy('price', 'desc');
+        } else {
+            $query->orderByDesc('created_at');
         }
 
         $products = $query
-            ->orderByDesc('created_at')
             ->paginate(12)
             ->appends($request->query());
 
-        $categories = Product::query()
-            ->where('status', 'active')
-            ->whereNotNull('category')
-            ->distinct()
-            ->pluck('category');
-
         return view('arrendatario', [
-            'products' => $products,
-            'categories' => $categories,
-            'filters' => [
-                'search' => $request->query('search'),
+            'products'   => $products,
+            'categories' => collect(),
+            'filters'    => [
+                'search'    => $request->query('search'),
                 'min_price' => $request->query('min_price'),
                 'max_price' => $request->query('max_price'),
-                'availability_date' => $request->query('availability_date'),
-                'location' => $request->query('location'),
-                'category' => $request->query('category'),
+                'location'  => $request->query('location'),
+                'sort'      => $request->query('sort', 'recent'),
             ],
         ]);
     }

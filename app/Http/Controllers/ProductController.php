@@ -17,21 +17,19 @@ class ProductController extends Controller
        
 
         $request->validate([
-            'name' => 'required',
+            'name'        => 'required',
             'description' => 'required',
-            'price' => 'required|numeric',
-            'deposit' => 'nullable|numeric',
-            'image' => 'nullable|image',
-            'department' => 'required',
-            'city' => 'required',
+            'price'       => 'required|numeric',
+            'deposit'     => 'nullable|numeric',
+            'image'       => 'nullable|image|max:5120',
+            'department'  => 'required',
+            'city'        => 'required',
         ]);
 
         $imagePath = null;
 
-        if ($request->hasFile('image')) {
-
-            $imagePath = $request->file('image')
-                ->store('products', 'public');
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $imagePath = $request->file('image')->store('products', 'public');
         }
 
         Product::create([
@@ -48,6 +46,11 @@ class ProductController extends Controller
 
         return redirect()->back()
             ->with('success', 'Producto publicado');
+    }
+
+    public function show(Product $product)
+    {
+        return view('products.show', compact('product'));
     }
 
     public function index()

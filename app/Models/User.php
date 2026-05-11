@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Product;
 
 class User extends Authenticatable
 {
@@ -32,12 +31,25 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
 
+    /** Productos publicados por el arrendador */
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
+    }
+
+    /** Transacciones donde este usuario ES el arrendatario */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
+
+    /** Transacciones donde este usuario ES el arrendador (solicitudes recibidas) */
+    public function receivedTransactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'landlord_id');
     }
 }
