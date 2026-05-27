@@ -15,14 +15,13 @@ class LandlordRentalRequestController extends Controller
             ->latest()
             ->get();
 
-       return view('arrendador-solicitudes', compact('transactions'));
+        return view('arrendador-solicitudes', compact('transactions'));
     }
 
     public function update(Request $request, Transaction $transaction)
     {
-        // Validar acción
         $request->validate([
-            'action' => 'required|in:approved,rejected',
+            'action' => 'required|in:aprobada,rechazada',
         ]);
 
         // Verificar que la solicitud pertenece al arrendador
@@ -30,8 +29,8 @@ class LandlordRentalRequestController extends Controller
             abort(403);
         }
 
-        // SOLO bloquear si ya fue aprobada o rechazada
-        if ($transaction->status === 'approved' || $transaction->status === 'rejected') {
+        // Bloquear si ya fue procesada
+        if (in_array($transaction->status, ['aprobada', 'rechazada'])) {
             return back()->with('error', 'Esta solicitud ya fue procesada.');
         }
 
@@ -41,7 +40,7 @@ class LandlordRentalRequestController extends Controller
 
         return back()->with(
             'success',
-            $request->action === 'approved'
+            $request->action === 'aprobada'
                 ? 'Solicitud aprobada correctamente.'
                 : 'Solicitud rechazada correctamente.'
         );

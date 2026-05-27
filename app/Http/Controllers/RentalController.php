@@ -10,12 +10,19 @@ use Carbon\Carbon;
 
 class RentalController extends Controller
 {
+    private const TERMS_VERSION = 'v1.0';
+
     public function store(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'start_date' => 'required|date',
-            'end_date'   => 'required|date|after_or_equal:start_date',
+            'product_id'   => 'required|exists:products,id',
+            'start_date'   => 'required|date|after_or_equal:today',
+            'end_date'     => 'required|date|after:start_date',
+            'accept_terms' => 'accepted',
+        ], [
+            'start_date.after_or_equal' => 'La fecha de inicio debe ser hoy o posterior.',
+            'end_date.after'            => 'La fecha de fin debe ser posterior a la de inicio.',
+            'accept_terms.accepted'     => 'Debes aceptar los términos y condiciones para confirmar el arriendo.',
         ]);
 
         $product = Product::findOrFail($request->product_id);
@@ -26,49 +33,33 @@ class RentalController extends Controller
         // Validar conflicto de fechas
         $conflict = Transaction::where('product_id', $product->id)
             ->where(function ($query) use ($start, $end) {
-
                 $query->whereBetween('starts_at', [$start, $end])
                       ->orWhereBetween('ends_at', [$start, $end]);
-
             })
             ->exists();
 
         if ($conflict) {
-
             return back()->with('error', 'Las fechas seleccionadas ya están ocupadas.');
         }
 
-        $days = $start->diffInDays($end) + 1;
-
+        $days  = $start->diffInDays($end);
         $total = $days * $product->price;
 
         Transaction::create([
-
-            'user_id' => Auth::id(),
-
-            'landlord_id' => $product->user_id,
-
-            'product_id' => $product->id,
-
-            'item_name' => $product->name,
-
-            'starts_at' => $start,
-
-            'ends_at' => $end,
-
-            'rental_days' => $days,
-
-            'total_amount' => $total,
-
-            'status' => 'pending',
-
-            'terms_version' => '1.0',
-
-            'terms_snapshot' => 'Aceptados',
-
+            'user_id'           => Auth::id(),
+            'landlord_id'       => $product->user_id,
+            'product_id'        => $product->id,
+            'item_name'         => $product->name,
+            'starts_at'         => $start,
+            'ends_at'           => $end,
+            'rental_days'       => $days,
+            'total_amount'      => $total,
+            'status'            => 'pendiente',
+            'terms_version'     => self::TERMS_VERSION,
+            'terms_snapshot'    => 'Aceptados',
             'accepted_terms_at' => now(),
         ]);
 
-        return back()->with('success', 'Solicitud enviada correctamente.');
+        return back()->with('success', '¡Solicitud enviada! El arrendador tiene 48h para responder.');
     }
 }
