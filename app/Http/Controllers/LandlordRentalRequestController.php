@@ -3,39 +3,47 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class LandlordRentalRequestController extends Controller
 {
-    public function index(Request $request): View
+    public function index(): View
     {
-        return view('arrendador-solicitudes', [
-            'requests' => $request->user()
-                ->receivedTransactions()
-                ->with('user')
-                ->latest()
-                ->get(),
-        ]);
+        $transactions = Transaction::with(['user', 'product'])
+            ->where('landlord_id', auth()->id())
+            ->latest()
+            ->get();
+
+       return view('arrendador-solicitudes', compact('transactions'));
     }
 
-    public function update(Request $request, Transaction $transaction): RedirectResponse
+    public function update(Request $request, Transaction $transaction)
     {
-        abort_unless((int) $transaction->landlord_id === (int) $request->user()->id, 404);
-
-        $validated = $request->validate([
-            'decision' => ['required', 'in:aprobada,rechazada'],
+        // Validar acción
+        $request->validate([
+            'action' => 'required|in:approved,rejected',
         ]);
 
-        if ($transaction->status === 'pendiente') {
-            $transaction->update([
-                'status' => $validated['decision'],
-            ]);
+        // Verificar que la solicitud pertenece al arrendador
+        if ($transaction->landlord_id !== auth()->id()) {
+            abort(403);
         }
 
-        return redirect()
-            ->route('landlord.requests.index')
-            ->with('status', 'La solicitud fue actualizada correctamente.');
+        // SOLO bloquear si ya fue aprobada o rechazada
+        if ($transaction->status === 'approved' || $transaction->status === 'rejected') {
+            return back()->with('error', 'Esta solicitud ya fue procesada.');
+        }
+
+        // Actualizar estado
+        $transaction->status = $request->action;
+        $transaction->save();
+
+        return back()->with(
+            'success',
+            $request->action === 'approved'
+                ? 'Solicitud aprobada correctamente.'
+                : 'Solicitud rechazada correctamente.'
+        );
     }
 }

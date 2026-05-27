@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Reservation;
 
 class User extends Authenticatable
 {
@@ -52,4 +53,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Transaction::class, 'landlord_id');
     }
+    public function reservations(): HasMany
+{
+    return $this->hasMany(Reservation::class, 'tenant_id');
+}
 }

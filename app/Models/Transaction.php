@@ -29,19 +29,19 @@ class Transaction extends Model
         'total_amount'      => 'decimal:2',
     ];
 
-    /** El arrendatario que solicitó el alquiler */
+    /** Arrendatario */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    /** El arrendador dueño del producto */
+    /** Arrendador */
     public function landlord(): BelongsTo
     {
         return $this->belongsTo(User::class, 'landlord_id');
     }
 
-    /** Producto asociado (opcional, si se guarda la FK) */
+    /** Producto */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');

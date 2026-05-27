@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -22,24 +23,39 @@ class ArrendatarioController extends Controller
 
         // Filtro por nombre
         if (!empty($validated['search'])) {
+
             $term = $validated['search'];
+
             $query->where('name', 'like', "%{$term}%");
         }
 
-        // Filtro precio mínimo
+        // Precio mínimo
         if (!empty($validated['min_price'])) {
-            $query->where('price', '>=', $validated['min_price']);
+
+            $query->where(
+                'price',
+                '>=',
+                $validated['min_price']
+            );
         }
 
-        // Filtro precio máximo
+        // Precio máximo
         if (!empty($validated['max_price'])) {
-            $query->where('price', '<=', $validated['max_price']);
+
+            $query->where(
+                'price',
+                '<=',
+                $validated['max_price']
+            );
         }
 
-        // Filtro ubicación (city o department)
+        // Ubicación
         if (!empty($validated['location'])) {
+
             $location = $validated['location'];
+
             $query->where(function ($q) use ($location) {
+
                 $q->where('city', 'like', "%{$location}%")
                   ->orWhere('department', 'like', "%{$location}%");
             });
@@ -47,11 +63,17 @@ class ArrendatarioController extends Controller
 
         // Ordenamiento
         $sort = $validated['sort'] ?? 'recent';
+
         if ($sort === 'price_asc') {
+
             $query->orderBy('price', 'asc');
+
         } elseif ($sort === 'price_desc') {
+
             $query->orderBy('price', 'desc');
+
         } else {
+
             $query->orderByDesc('created_at');
         }
 
@@ -60,9 +82,12 @@ class ArrendatarioController extends Controller
             ->appends($request->query());
 
         return view('arrendatario', [
-            'products'   => $products,
+
+            'products' => $products,
+
             'categories' => collect(),
-            'filters'    => [
+
+            'filters' => [
                 'search'    => $request->query('search'),
                 'min_price' => $request->query('min_price'),
                 'max_price' => $request->query('max_price'),
@@ -71,4 +96,42 @@ class ArrendatarioController extends Controller
             ],
         ]);
     }
+
+  public function show(Product $product): View
+{
+    $occupiedDates = [];
+
+/*
+|--------------------------------------------------------------------------
+| SOLO TOMAR RESERVAS APROBADAS
+|--------------------------------------------------------------------------
+|
+| Las pendientes NO deben bloquear fechas.
+| Las rechazadas tampoco.
+|
+*/
+
+$transactions = $product->transactions
+    ->where('status', 'approved');
+
+foreach ($transactions as $transaction) {
+
+    $start = Carbon::parse($transaction->starts_at);
+
+    $end = Carbon::parse($transaction->ends_at);
+
+    while ($start <= $end) {
+
+        $occupiedDates[] = $start->format('Y-m-d');
+
+        $start->addDay();
+    }
 }
+
+    return view('products.show', [
+
+        'product' => $product,
+
+        'occupiedDates' => $occupiedDates,
+    ]);
+}}
