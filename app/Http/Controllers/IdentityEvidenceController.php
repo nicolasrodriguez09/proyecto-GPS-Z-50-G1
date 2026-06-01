@@ -57,6 +57,10 @@ class IdentityEvidenceController extends Controller
             }
         } else {
             $user->password = Hash::make(Str::random(40));
+            // Agregamos valores por defecto a los campos obligatorios para evitar error de SQL
+            $user->document = 'N/A';
+            $user->phone = '0000000000';
+            $user->role = 'arrendatario';
         }
 
         $user->name = $validated['name'];

@@ -39,7 +39,6 @@ COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.con
 
 COPY composer.json composer.lock ./
 RUN composer install \
-    --no-dev \
     --no-interaction \
     --no-progress \
     --prefer-dist \
