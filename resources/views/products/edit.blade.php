@@ -236,7 +236,7 @@ select {
                 <div class="pub-card-body">
                     @if($product->image)
                     <div class="current-img-wrap">
-                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                        <img src="{{ Str::startsWith($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
                         <div class="current-img-label">📷 Imagen actual</div>
                     </div>
                     @endif

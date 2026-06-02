@@ -388,10 +388,7 @@
 
                     @if($product->image)
 
-                        <img
-                            src="{{ Storage::url($product->image) }}"
-                            alt="{{ $product->name }}"
-                        >
+                        <img src="{{ Str::startsWith($product->image, 'http') ? $product->image : Storage::url($product->image) }}" alt="{{ $product->name }}">
 
                     @endif
 
