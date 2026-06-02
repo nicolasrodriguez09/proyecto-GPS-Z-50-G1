@@ -20,13 +20,13 @@ RUN apt-get update \
         git \
         unzip \
         libicu-dev \
-        libsqlite3-dev \
+        libpq-dev \
         libzip-dev \
     && docker-php-ext-install \
         bcmath \
         intl \
-        pdo_mysql \
-        pdo_sqlite \
+        pdo_pgsql \
+        pgsql \
         zip \
     && a2enmod rewrite headers \
     && rm -rf /var/lib/apt/lists/*
@@ -61,6 +61,9 @@ RUN cp .env.example .env \
     && chmod -R ug+rwx bootstrap/cache storage \
     && php artisan package:discover --ansi
 
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+CMD ["/entrypoint.sh"]
