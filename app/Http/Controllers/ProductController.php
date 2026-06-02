@@ -28,10 +28,14 @@ class ProductController extends Controller
         $imagePath = null;
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $uploaded = Cloudinary::upload($request->file('image')->getRealPath(), [
-                'folder' => 'products',
-            ]);
-            $imagePath = $uploaded->getSecurePath();
+            try {
+                $uploaded = Cloudinary::upload($request->file('image')->getRealPath(), [
+                    'folder' => 'products',
+                ]);
+                $imagePath = $uploaded->getSecurePath();
+            } catch (\Exception $e) {
+                return response('CLOUDINARY ERROR: ' . $e->getMessage(), 500);
+            }
         }
 
         Product::create([
@@ -86,23 +90,28 @@ class ProductController extends Controller
             'city'        => 'required',
         ]);
 
-        if ($request->hasFile('image')) {
-            $uploaded = Cloudinary::upload($request->file('image')->getRealPath(), [
-                'folder' => 'products',
+        try {
+            if ($request->hasFile('image')) {
+                $uploaded = Cloudinary::upload($request->file('image')->getRealPath(), [
+                    'folder' => 'products',
+                ]);
+                $product->image = $uploaded->getSecurePath();
+            }
+
+            $product->update([
+                'name'        => $request->name,
+                'description' => $request->description,
+                'price'       => $request->price,
+                'deposit'     => $request->deposit,
+                'department'  => $request->department,
+                'city'        => $request->city,
             ]);
-            $product->image = $uploaded->getSecurePath();
+
+            $product->save();
+
+        } catch (\Exception $e) {
+            return response('ERROR: ' . $e->getMessage(), 500);
         }
-
-        $product->update([
-            'name'        => $request->name,
-            'description' => $request->description,
-            'price'       => $request->price,
-            'deposit'     => $request->deposit,
-            'department'  => $request->department,
-            'city'        => $request->city,
-        ]);
-
-        $product->save();
 
         return redirect()->route('products.index')
             ->with('success', 'Producto actualizado');
