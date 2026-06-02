@@ -15,7 +15,7 @@ class LandlordRentalRequestController extends Controller
             ->latest()
             ->get();
 
-       return view('arrendador-solicitudes', compact('transactions'));
+        return view('arrendador-solicitudes', compact('transactions'));
     }
 
     public function update(Request $request, Transaction $transaction)
