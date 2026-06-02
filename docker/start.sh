@@ -25,5 +25,6 @@ chmod -R ug+rwx /var/www/html/storage
 
 php artisan config:clear
 php artisan migrate --force
+php artisan config:cache
 
 apache2-foreground
