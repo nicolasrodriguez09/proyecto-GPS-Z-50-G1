@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Generar .env desde variables de entorno
 cat > /var/www/html/.env << EOF
 APP_NAME="${APP_NAME}"
 APP_ENV="${APP_ENV}"
@@ -16,6 +15,9 @@ DB_PASSWORD="${DB_PASSWORD}"
 SESSION_DRIVER="${SESSION_DRIVER}"
 SESSION_LIFETIME="${SESSION_LIFETIME}"
 CACHE_STORE="${CACHE_STORE}"
+CLOUDINARY_CLOUD_NAME="${CLOUDINARY_CLOUD_NAME}"
+CLOUDINARY_API_KEY="${CLOUDINARY_API_KEY}"
+CLOUDINARY_API_SECRET="${CLOUDINARY_API_SECRET}"
 EOF
 
 chown www-data:www-data /var/www/html/.env
