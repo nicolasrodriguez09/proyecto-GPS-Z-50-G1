@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <x-app-layout>
@@ -50,9 +49,7 @@
         margin-bottom: 1rem;
     }
 
-    .ps-back:hover {
-        color: white;
-    }
+    .ps-back:hover { color: white; }
 
     .ps-hero-title {
         font-family: 'Nunito', sans-serif;
@@ -79,13 +76,10 @@
     }
 
     @media (max-width: 900px) {
-        .ps-body {
-            grid-template-columns: 1fr;
-        }
+        .ps-body { grid-template-columns: 1fr; }
     }
 
-    .ps-card,
-    .ps-price-card {
+    .ps-card, .ps-price-card {
         background: white;
         border-radius: 20px;
         border: 1.5px solid #e8f0fb;
@@ -93,9 +87,7 @@
         overflow: hidden;
     }
 
-    .ps-price-card {
-        padding: 1.75rem;
-    }
+    .ps-price-card { padding: 1.75rem; }
 
     .ps-img {
         width: 100%;
@@ -107,11 +99,7 @@
         position: relative;
     }
 
-    .ps-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+    .ps-img img { width: 100%; height: 100%; object-fit: cover; }
 
     .ps-available-badge {
         position: absolute;
@@ -124,21 +112,10 @@
         font-family: 'Nunito', sans-serif;
     }
 
-    .ps-available-badge.yes {
-        background: #f0fdf4;
-        color: #16a34a;
-        border: 1px solid #bbf7d0;
-    }
+    .ps-available-badge.yes { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+    .ps-available-badge.no  { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
 
-    .ps-available-badge.no {
-        background: #fef2f2;
-        color: #dc2626;
-        border: 1px solid #fecaca;
-    }
-
-    .ps-card-body {
-        padding: 1.75rem;
-    }
+    .ps-card-body { padding: 1.75rem; }
 
     .ps-product-name {
         font-family: 'Nunito', sans-serif;
@@ -148,17 +125,8 @@
         margin-bottom: 1rem;
     }
 
-    .ps-meta-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .ps-meta-item {
-        font-size: 0.875rem;
-        color: #6B7280;
-    }
+    .ps-meta-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+    .ps-meta-item { font-size: 0.875rem; color: #6B7280; }
 
     .ps-section-label {
         font-size: 0.75rem;
@@ -168,11 +136,7 @@
         margin-bottom: 0.5rem;
     }
 
-    .ps-description {
-        font-size: 0.95rem;
-        color: #374151;
-        line-height: 1.7;
-    }
+    .ps-description { font-size: 0.95rem; color: #374151; line-height: 1.7; }
 
     .ps-price-label {
         font-size: 0.75rem;
@@ -189,11 +153,7 @@
         color: #1A5FA8;
     }
 
-    .ps-divider {
-        border: none;
-        border-top: 1px solid #edf2f7;
-        margin: 1.25rem 0;
-    }
+    .ps-divider { border: none; border-top: 1px solid #edf2f7; margin: 1.25rem 0; }
 
     .ps-detail-row {
         display: flex;
@@ -202,14 +162,8 @@
         font-size: 0.875rem;
     }
 
-    .ps-detail-row .label {
-        color: #9CA3AF;
-    }
-
-    .ps-detail-row .value {
-        color: #1a2b4a;
-        font-weight: 600;
-    }
+    .ps-detail-row .label { color: #9CA3AF; }
+    .ps-detail-row .value { color: #1a2b4a; font-weight: 600; }
 
     .ps-owner-card {
         background: #f0f6ff;
@@ -222,8 +176,7 @@
     }
 
     .ps-owner-avatar {
-        width: 42px;
-        height: 42px;
+        width: 42px; height: 42px;
         border-radius: 50%;
         background: linear-gradient(135deg, #29ABE2, #1A5FA8);
         color: white;
@@ -231,18 +184,11 @@
         align-items: center;
         justify-content: center;
         font-weight: 800;
-    }
-
-    .ps-owner-name {
         font-family: 'Nunito', sans-serif;
-        font-weight: 800;
-        color: #1a2b4a;
     }
 
-    .ps-owner-label {
-        font-size: 0.75rem;
-        color: #9CA3AF;
-    }
+    .ps-owner-name { font-family: 'Nunito', sans-serif; font-weight: 800; color: #1a2b4a; }
+    .ps-owner-label { font-size: 0.75rem; color: #9CA3AF; }
 
     .ps-btn-rent {
         width: 100%;
@@ -258,9 +204,7 @@
         transition: 0.2s;
     }
 
-    .ps-btn-rent:hover {
-        transform: translateY(-2px);
-    }
+    .ps-btn-rent:hover { transform: translateY(-2px); }
 
     .ps-btn-rent.disabled {
         background: #E5E7EB;
@@ -268,12 +212,7 @@
         cursor: not-allowed;
     }
 
-    .ps-note {
-        font-size: 0.75rem;
-        color: #9CA3AF;
-        text-align: center;
-        margin-top: 0.75rem;
-    }
+    .ps-note { font-size: 0.75rem; color: #9CA3AF; text-align: center; margin-top: 0.75rem; }
 
     .ps-info-card {
         background: linear-gradient(135deg, #1A5FA8, #29ABE2);
@@ -283,35 +222,23 @@
         color: white;
     }
 
-    .ps-info-title {
-        font-family: 'Nunito', sans-serif;
-        font-weight: 800;
-        margin-bottom: 0.75rem;
-    }
-
-    .ps-info-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .ps-info-list li {
-        margin-bottom: 0.5rem;
-        font-size: 0.85rem;
-    }
+    .ps-info-title { font-family: 'Nunito', sans-serif; font-weight: 800; margin-bottom: 0.75rem; }
+    .ps-info-list { list-style: none; padding: 0; margin: 0; }
+    .ps-info-list li { margin-bottom: 0.5rem; font-size: 0.85rem; }
 
     .calendar-input {
         width: 100%;
+        box-sizing: border-box;
         margin-top: 0.4rem;
         padding: 0.75rem;
         border: 1px solid #dbeafe;
         border-radius: 12px;
         outline: none;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.875rem;
     }
 
-    .calendar-input:focus {
-        border-color: #29ABE2;
-    }
+    .calendar-input:focus { border-color: #29ABE2; }
 
     .occupied-box {
         margin-top: 1rem;
@@ -322,58 +249,80 @@
         padding: 0.75rem;
         font-size: 0.8rem;
     }
+
+    /* ── Términos y condiciones ── */
+    .ps-terms-box {
+        background: #f8fbff;
+        border: 1.5px solid #e8f0fb;
+        border-radius: 12px;
+        padding: 1rem 1.125rem;
+        max-height: 140px;
+        overflow-y: auto;
+        margin-bottom: 0.875rem;
+        font-size: 0.8rem;
+        color: #4B5563;
+        line-height: 1.7;
+        white-space: pre-line;
+    }
+
+    .ps-checkbox-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.625rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+    }
+
+    .ps-checkbox-row input[type="checkbox"] {
+        width: 17px; height: 17px;
+        margin-top: 2px;
+        accent-color: #1A5FA8;
+        flex-shrink: 0;
+        cursor: pointer;
+    }
+
+    .ps-checkbox-row span {
+        font-size: 0.8125rem;
+        color: #374151;
+        line-height: 1.5;
+    }
+
+    /* Errores de validación */
+    .ps-errors {
+        background: #fef2f2;
+        border: 1.5px solid #fecaca;
+        border-radius: 12px;
+        padding: 0.875rem 1rem;
+        margin-bottom: 1rem;
+        font-size: 0.8rem;
+        color: #dc2626;
+    }
+
+    .ps-errors ul { margin: 0; padding-left: 1.25rem; }
+
+    .ps-flash-success {
+        background: #f0fdf4;
+        border: 1.5px solid #bbf7d0;
+        color: #15803d;
+        border-radius: 12px;
+        padding: 0.875rem 1rem;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
 </style>
 
 <div class="ps-wrapper">
-    @if(session('success'))
-
-    <div style="
-        background:#dcfce7;
-        color:#166534;
-        padding:1rem;
-        border-radius:12px;
-        margin:1rem auto;
-        max-width:1100px;
-    ">
-        {{ session('success') }}
-    </div>
-
-@endif
-
-@if(session('error'))
-
-    <div style="
-        background:#fee2e2;
-        color:#991b1b;
-        padding:1rem;
-        border-radius:12px;
-        margin:1rem auto;
-        max-width:1100px;
-    ">
-        {{ session('error') }}
-    </div>
-
-@endif
 
     {{-- HERO --}}
     <div class="ps-hero">
-
         <div class="ps-hero-inner">
-
             <a href="{{ url('/arrendatario') }}" class="ps-back">
                 ← Volver al marketplace
             </a>
-
-            <div class="ps-hero-title">
-                {{ $product->name }}
-            </div>
-
-            <div class="ps-hero-sub">
-                📍 {{ $product->city }}, {{ $product->department }}
-            </div>
-
+            <div class="ps-hero-title">{{ $product->name }}</div>
+            <div class="ps-hero-sub">📍 {{ $product->city }}, {{ $product->department }}</div>
         </div>
-
     </div>
 
     {{-- BODY --}}
@@ -381,80 +330,46 @@
 
         {{-- IZQUIERDA --}}
         <div>
-
             <div class="ps-card">
 
                 <div class="ps-img">
-
                     @if($product->image)
-
-                        <img src="{{ Str::startsWith($product->image, 'http') ? $product->image : Storage::url($product->image) }}" alt="{{ $product->name }}">
-
+                        <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}">
                     @endif
-
                     <span class="ps-available-badge {{ $product->available ? 'yes' : 'no' }}">
                         {{ $product->available ? '✓ Disponible' : '✗ No disponible' }}
                     </span>
-
                 </div>
 
                 <div class="ps-card-body">
-
-                    <div class="ps-product-name">
-                        {{ $product->name }}
-                    </div>
+                    <div class="ps-product-name">{{ $product->name }}</div>
 
                     <div class="ps-meta-row">
-
-                        <div class="ps-meta-item">
-                            📍 {{ $product->city }}, {{ $product->department }}
-                        </div>
-
-                        <div class="ps-meta-item">
-                            📅 Publicado {{ $product->created_at->diffForHumans() }}
-                        </div>
-
+                        <div class="ps-meta-item">📍 {{ $product->city }}, {{ $product->department }}</div>
+                        <div class="ps-meta-item">📅 Publicado {{ $product->created_at->diffForHumans() }}</div>
                     </div>
 
-                    <div class="ps-section-label">
-                        Descripción
-                    </div>
-
-                    <p class="ps-description">
-                        {{ $product->description }}
-                    </p>
-
+                    <div class="ps-section-label">Descripción</div>
+                    <p class="ps-description">{{ $product->description }}</p>
                 </div>
 
             </div>
-
         </div>
 
         {{-- DERECHA --}}
         <div>
-
             <div class="ps-price-card">
 
-                <div class="ps-price-label">
-                    Precio por día
-                </div>
-
-                <div class="ps-price-amount">
-                    ${{ number_format((float) $product->price, 0, ',', '.') }}
-                </div>
+                <div class="ps-price-label">Precio por día</div>
+                <div class="ps-price-amount">${{ number_format((float) $product->price, 0, ',', '.') }}</div>
 
                 <hr class="ps-divider">
 
                 @if($product->deposit)
-
                     <div class="ps-detail-row">
                         <span class="label">Depósito</span>
-
-                        <span class="value">
-                            ${{ number_format((float) $product->deposit, 0, ',', '.') }}
-                        </span>
+                        <span class="value">${{ number_format((float) $product->deposit, 0, ',', '.') }}</span>
                     </div>
-
                 @endif
 
                 <div class="ps-detail-row">
@@ -464,36 +379,21 @@
 
                 <div class="ps-detail-row">
                     <span class="label">Estado</span>
-
-                    <span class="value">
-                        {{ $product->available ? 'Disponible' : 'No disponible' }}
-                    </span>
+                    <span class="value">{{ $product->available ? 'Disponible' : 'No disponible' }}</span>
                 </div>
 
                 <hr class="ps-divider">
 
-                <div class="ps-section-label">
-                    Publicado por
-                </div>
+                <div class="ps-section-label">Publicado por</div>
 
                 <div class="ps-owner-card">
-
                     <div class="ps-owner-avatar">
                         {{ strtoupper(substr($product->user->name ?? 'U', 0, 2)) }}
                     </div>
-
                     <div>
-
-                        <div class="ps-owner-name">
-                            {{ $product->user->name ?? 'Arrendador' }}
-                        </div>
-
-                        <div class="ps-owner-label">
-                            Arrendador verificado
-                        </div>
-
+                        <div class="ps-owner-name">{{ $product->user->name ?? 'Arrendador' }}</div>
+                        <div class="ps-owner-label">Arrendador verificado</div>
                     </div>
-
                 </div>
 
                 {{-- FORMULARIO --}}
@@ -501,67 +401,86 @@
 
                     <hr class="ps-divider">
 
-                    <div class="ps-section-label">
-                        Selecciona fechas
-                    </div>
+                    <div class="ps-section-label">Selecciona fechas</div>
+
+                    {{-- Mensajes flash --}}
+                    @if(session('success'))
+                        <div class="ps-flash-success">✓ {{ session('success') }}</div>
+                    @endif
+
+                    @if(session('error'))
+                        <div class="ps-errors">{{ session('error') }}</div>
+                    @endif
+
+                    {{-- Errores de validación --}}
+                    @if($errors->any())
+                        <div class="ps-errors">
+                            <ul>
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
                     <form action="{{ route('rentals.store') }}" method="POST">
-
                         @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
 
-                        <input
-                            type="hidden"
-                            name="product_id"
-                            value="{{ $product->id }}"
-                        >
-
+                        {{-- Fecha inicio --}}
                         <div style="margin-bottom:1rem;">
-
-                            <label style="font-size:0.8rem;color:#6B7280;">
-                                Fecha inicio
-                            </label>
-
+                            <label style="font-size:0.8rem;color:#6B7280;">Fecha inicio</label>
                             <input
                                 type="text"
                                 id="start_date"
                                 name="start_date"
                                 class="calendar-input"
+                                value="{{ old('start_date') }}"
+                                placeholder="Selecciona fecha"
                                 required
                             >
-
                         </div>
 
+                        {{-- Fecha fin --}}
                         <div style="margin-bottom:1rem;">
-
-                            <label style="font-size:0.8rem;color:#6B7280;">
-                                Fecha fin
-                            </label>
-
+                            <label style="font-size:0.8rem;color:#6B7280;">Fecha fin</label>
                             <input
                                 type="text"
                                 id="end_date"
                                 name="end_date"
                                 class="calendar-input"
+                                value="{{ old('end_date') }}"
+                                placeholder="Selecciona fecha"
                                 required
                             >
-
                         </div>
 
                         @if(count($occupiedDates) > 0)
-
                             <div class="occupied-box">
-
-                                <strong>Fechas ocupadas:</strong>
-
-                                <br><br>
-
+                                <strong>Fechas ocupadas:</strong><br><br>
                                 {{ implode(', ', $occupiedDates) }}
-
                             </div>
-
                         @endif
 
-                        <br>
+                        {{-- Términos y condiciones --}}
+                        <hr class="ps-divider">
+                        <div class="ps-section-label">📄 Términos y condiciones</div>
+
+                        <div class="ps-terms-box">1. El arrendatario se compromete a usar el artículo de forma responsable y conforme a su finalidad.
+2. El arrendatario debe devolver el artículo en la fecha acordada y en condiciones equivalentes a las de la entrega.
+3. Cualquier daño, pérdida o uso indebido puede generar cobros adicionales y afectaciones sobre el depósito.
+4. El arrendatario debe reportar incidentes o fallas relevantes a la plataforma de manera inmediata.
+5. La confirmación del alquiler deja constancia de que el arrendatario conoce sus responsabilidades.</div>
+
+                        <label class="ps-checkbox-row">
+                            <input
+                                type="checkbox"
+                                name="accept_terms"
+                                value="1"
+                                {{ old('accept_terms') ? 'checked' : '' }}
+                            >
+                            <span>He leído y acepto los <strong>términos y condiciones</strong> del arriendo.</span>
+                        </label>
 
                         <button type="submit" class="ps-btn-rent">
                             Solicitar arriendo
@@ -575,27 +494,20 @@
 
                 @else
 
-                    <div class="ps-btn-rent disabled">
-                        No disponible
-                    </div>
+                    <div class="ps-btn-rent disabled">No disponible</div>
 
                 @endif
 
             </div>
 
             <div class="ps-info-card">
-
-                <div class="ps-info-title">
-                    ¿Por qué arrendar con nosotros?
-                </div>
-
+                <div class="ps-info-title">¿Por qué arrendar con nosotros?</div>
                 <ul class="ps-info-list">
                     <li>✅ Variedad de productos.</li>
                     <li>✅ Arrendadores verificados.</li>
                     <li>✅ Reservas seguras.</li>
                     <li>✅ Soporte dedicado.</li>
                 </ul>
-
             </div>
 
         </div>
@@ -605,21 +517,21 @@
 </div>
 
 <script>
-
     const occupiedDates = @json($occupiedDates);
 
     flatpickr("#start_date", {
         minDate: "today",
         disable: occupiedDates,
-        dateFormat: "Y-m-d"
+        dateFormat: "Y-m-d",
+        locale: { firstDayOfWeek: 1 }
     });
 
     flatpickr("#end_date", {
         minDate: "today",
         disable: occupiedDates,
-        dateFormat: "Y-m-d"
+        dateFormat: "Y-m-d",
+        locale: { firstDayOfWeek: 1 }
     });
-
 </script>
 
 </x-app-layout>
