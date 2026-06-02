@@ -59,6 +59,7 @@ RUN touch .env \
         storage/logs \
     && chown -R www-data:www-data bootstrap/cache storage \
     && chmod -R ug+rwx bootstrap/cache storage \
+    && php artisan migrate --force \
     && php artisan package:discover --ansi || true
 
 EXPOSE 80
