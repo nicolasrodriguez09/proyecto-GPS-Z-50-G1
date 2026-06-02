@@ -21,19 +21,26 @@ class ProductController extends Controller
         ]);
         $imagePath = null;
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $uploaded = cloudinary()->upload($request->file('image')->getRealPath());
-            $imagePath = $uploaded->getSecurePath();
+            $cloudinary = new \Cloudinary\Cloudinary([
+                'cloud' => [
+                    'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                    'api_key'    => env('CLOUDINARY_API_KEY'),
+                    'api_secret' => env('CLOUDINARY_API_SECRET'),
+                ],
+            ]);
+            $result = $cloudinary->uploadApi()->upload($request->file('image')->getRealPath());
+            $imagePath = $result['secure_url'];
         }
         Product::create([
-            'name' => $request->name,
+            'name'        => $request->name,
             'description' => $request->description,
-            'price' => $request->price,
-            'deposit' => $request->deposit,
-            'image' => $imagePath,
-            'available' => true,
-            'department' => $request->department,
-            'city' => $request->city,
-            'user_id' => auth()->id(),
+            'price'       => $request->price,
+            'deposit'     => $request->deposit,
+            'image'       => $imagePath,
+            'available'   => true,
+            'department'  => $request->department,
+            'city'        => $request->city,
+            'user_id'     => auth()->id(),
         ]);
         return redirect()->back()
             ->with('success', 'Producto publicado');
@@ -44,8 +51,7 @@ class ProductController extends Controller
     }
     public function index()
     {
-        $products = Product::where('user_id', auth()->id())
-            ->get();
+        $products = Product::where('user_id', auth()->id())->get();
         return view('products.index', compact('products'));
     }
     public function edit(Product $product)
@@ -61,24 +67,31 @@ class ProductController extends Controller
             abort(403);
         }
         $request->validate([
-            'name' => 'required',
+            'name'        => 'required',
             'description' => 'required',
-            'price' => 'required|numeric',
-            'deposit' => 'nullable|numeric',
-            'department' => 'required',
-            'city' => 'required',
+            'price'       => 'required|numeric',
+            'deposit'     => 'nullable|numeric',
+            'department'  => 'required',
+            'city'        => 'required',
         ]);
-        if ($request->hasFile('image')) {
-            $uploaded = cloudinary()->upload($request->file('image')->getRealPath());
-            $product->image = $uploaded->getSecurePath();
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $cloudinary = new \Cloudinary\Cloudinary([
+                'cloud' => [
+                    'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                    'api_key'    => env('CLOUDINARY_API_KEY'),
+                    'api_secret' => env('CLOUDINARY_API_SECRET'),
+                ],
+            ]);
+            $result = $cloudinary->uploadApi()->upload($request->file('image')->getRealPath());
+            $product->image = $result['secure_url'];
         }
         $product->update([
-            'name' => $request->name,
+            'name'        => $request->name,
             'description' => $request->description,
-            'price' => $request->price,
-            'deposit' => $request->deposit,
-            'department' => $request->department,
-            'city' => $request->city,
+            'price'       => $request->price,
+            'deposit'     => $request->deposit,
+            'department'  => $request->department,
+            'city'        => $request->city,
         ]);
         $product->save();
         return redirect()->route('products.index')
