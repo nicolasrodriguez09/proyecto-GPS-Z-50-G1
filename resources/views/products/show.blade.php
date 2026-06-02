@@ -334,7 +334,7 @@
 
                 <div class="ps-img">
                     @if($product->image)
-                        <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}">
+                        <img src="{{ Str::startsWith($product->image, 'http') ? $product->image : Storage::url($product->image) }}" alt="{{ $product->name }}">
                     @endif
                     <span class="ps-available-badge {{ $product->available ? 'yes' : 'no' }}">
                         {{ $product->available ? '✓ Disponible' : '✗ No disponible' }}
