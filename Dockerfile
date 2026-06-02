@@ -22,11 +22,13 @@ RUN apt-get update \
         libicu-dev \
         libsqlite3-dev \
         libzip-dev \
+        libpq-dev \
     && docker-php-ext-install \
         bcmath \
         intl \
         pdo_mysql \
         pdo_sqlite \
+        pdo_pgsql \
         zip \
     && a2enmod rewrite headers \
     && rm -rf /var/lib/apt/lists/*
