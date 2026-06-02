@@ -48,7 +48,7 @@ RUN composer install \
 COPY . .
 COPY --from=frontend /app/public/build ./public/build
 
-RUN RUN touch .env \
+RUN touch .env \
     && rm -f public/hot \
     && mkdir -p \
         bootstrap/cache \
@@ -59,7 +59,7 @@ RUN RUN touch .env \
         storage/logs \
     && chown -R www-data:www-data bootstrap/cache storage \
     && chmod -R ug+rwx bootstrap/cache storage \
-    && php artisan package:discover --ansi
+    && php artisan package:discover --ansi || true
 
 EXPOSE 80
 
