@@ -48,7 +48,7 @@ RUN composer install \
 COPY . .
 COPY --from=frontend /app/public/build ./public/build
 
-RUN cp .env.example .env \
+RUN RUN touch .env \
     && rm -f public/hot \
     && mkdir -p \
         bootstrap/cache \
