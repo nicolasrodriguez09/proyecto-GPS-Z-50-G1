@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProductController extends Controller
 {
@@ -14,8 +15,6 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-       
-
         $request->validate([
             'name'        => 'required',
             'description' => 'required',
@@ -29,19 +28,22 @@ class ProductController extends Controller
         $imagePath = null;
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $imagePath = $request->file('image')->store('products', 'public');
+            $uploaded = Cloudinary::upload($request->file('image')->getRealPath(), [
+                'folder' => 'products',
+            ]);
+            $imagePath = $uploaded->getSecurePath();
         }
 
         Product::create([
-            'name' => $request->name,
+            'name'        => $request->name,
             'description' => $request->description,
-            'price' => $request->price,
-            'deposit' => $request->deposit,
-            'image' => $imagePath,
-            'available' => true,
-            'department' => $request->department,
-            'city' => $request->city,
-            'user_id' => auth()->id(),
+            'price'       => $request->price,
+            'deposit'     => $request->deposit,
+            'image'       => $imagePath,
+            'available'   => true,
+            'department'  => $request->department,
+            'city'        => $request->city,
+            'user_id'     => auth()->id(),
         ]);
 
         return redirect()->back()
@@ -55,8 +57,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::where('user_id', auth()->id())
-            ->get();
+        $products = Product::where('user_id', auth()->id())->get();
 
         return view('products.index', compact('products'));
     }
@@ -77,29 +78,28 @@ class ProductController extends Controller
         }
 
         $request->validate([
-            'name' => 'required',
+            'name'        => 'required',
             'description' => 'required',
-            'price' => 'required|numeric',
-            'deposit' => 'nullable|numeric',
-            'department' => 'required',
-            'city' => 'required',
+            'price'       => 'required|numeric',
+            'deposit'     => 'nullable|numeric',
+            'department'  => 'required',
+            'city'        => 'required',
         ]);
 
         if ($request->hasFile('image')) {
-
-            $imagePath = $request->file('image')
-                ->store('products', 'public');
-
-            $product->image = $imagePath;
+            $uploaded = Cloudinary::upload($request->file('image')->getRealPath(), [
+                'folder' => 'products',
+            ]);
+            $product->image = $uploaded->getSecurePath();
         }
 
         $product->update([
-            'name' => $request->name,
+            'name'        => $request->name,
             'description' => $request->description,
-            'price' => $request->price,
-            'deposit' => $request->deposit,
-            'department' => $request->department,
-            'city' => $request->city,
+            'price'       => $request->price,
+            'deposit'     => $request->deposit,
+            'department'  => $request->department,
+            'city'        => $request->city,
         ]);
 
         $product->save();

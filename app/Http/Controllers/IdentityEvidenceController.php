@@ -2,74 +2,121 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Illuminate\View\View;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
-class IdentityEvidenceController extends Controller
+class ProductController extends Controller
 {
-    private const ALLOWED_IMAGE_MIMES = 'jpg,jpeg,png,webp';
-
-    public function create(): View
+    public function create()
     {
-        return view('identity-evidence.create', [
-            'allowedFormats' => strtoupper(str_replace(',', ', ', self::ALLOWED_IMAGE_MIMES)),
-        ]);
+        return view('products.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'personal_photo' => ['required', 'image', 'mimes:'.self::ALLOWED_IMAGE_MIMES, 'max:5120'],
-            'identity_document' => ['required', 'image', 'mimes:'.self::ALLOWED_IMAGE_MIMES, 'max:5120'],
-        ], [
-            'personal_photo.required' => 'La foto personal es obligatoria.',
-            'personal_photo.image' => 'La foto personal debe ser una imagen valida.',
-            'personal_photo.mimes' => 'La foto personal debe estar en formato JPG, JPEG, PNG o WEBP.',
-            'identity_document.required' => 'El documento de identidad es obligatorio.',
-            'identity_document.image' => 'El documento de identidad debe ser una imagen valida.',
-            'identity_document.mimes' => 'El documento de identidad debe estar en formato JPG, JPEG, PNG o WEBP.',
+        $request->validate([
+            'name'        => 'required',
+            'description' => 'required',
+            'price'       => 'required|numeric',
+            'deposit'     => 'nullable|numeric',
+            'image'       => 'nullable|image|max:5120',
+            'department'  => 'required',
+            'city'        => 'required',
         ]);
 
-        $user = User::query()->firstOrNew([
-            'email' => $validated['email'],
-        ]);
+        $imagePath = null;
 
-        $oldPersonalPhotoPath = $user->personal_photo_path;
-        $oldIdentityDocumentPath = $user->identity_document_path;
-
-        $personalPhotoPath = $request->file('personal_photo')->store('identity-evidence/personal-photos', 'public');
-        $identityDocumentPath = $request->file('identity_document')->store('identity-evidence/identity-documents', 'public');
-
-        if ($user->exists) {
-            if ($oldPersonalPhotoPath) {
-                Storage::disk('public')->delete($oldPersonalPhotoPath);
-            }
-
-            if ($oldIdentityDocumentPath) {
-                Storage::disk('public')->delete($oldIdentityDocumentPath);
-            }
-        } else {
-            $user->password = Hash::make(Str::random(40));
-            // Agregamos valores por defecto a los campos obligatorios para evitar error de SQL
-            $user->document = 'N/A';
-            $user->phone = '0000000000';
-            $user->role = 'arrendatario';
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $uploaded = Cloudinary::upload($request->file('image')->getRealPath(), [
+                'folder' => 'products',
+            ]);
+            $imagePath = $uploaded->getSecurePath();
         }
 
-        $user->name = $validated['name'];
-        $user->personal_photo_path = $personalPhotoPath;
-        $user->identity_document_path = $identityDocumentPath;
-        $user->save();
+        Product::create([
+            'name'        => $request->name,
+            'description' => $request->description,
+            'price'       => $request->price,
+            'deposit'     => $request->deposit,
+            'image'       => $imagePath,
+            'available'   => true,
+            'department'  => $request->department,
+            'city'        => $request->city,
+            'user_id'     => auth()->id(),
+        ]);
 
-        return redirect()
-            ->route('identity-evidence.create')
-            ->with('status', 'Las evidencias de identidad se cargaron y asociaron correctamente al usuario.');
+        return redirect()->back()
+            ->with('success', 'Producto publicado');
+    }
+
+    public function show(Product $product)
+    {
+        return view('products.show', compact('product'));
+    }
+
+    public function index()
+    {
+        $products = Product::where('user_id', auth()->id())->get();
+
+        return view('products.index', compact('products'));
+    }
+
+    public function edit(Product $product)
+    {
+        if ($product->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return view('products.edit', compact('product'));
+    }
+
+    public function update(Request $request, Product $product)
+    {
+        if ($product->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'name'        => 'required',
+            'description' => 'required',
+            'price'       => 'required|numeric',
+            'deposit'     => 'nullable|numeric',
+            'department'  => 'required',
+            'city'        => 'required',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $uploaded = Cloudinary::upload($request->file('image')->getRealPath(), [
+                'folder' => 'products',
+            ]);
+            $product->image = $uploaded->getSecurePath();
+        }
+
+        $product->update([
+            'name'        => $request->name,
+            'description' => $request->description,
+            'price'       => $request->price,
+            'deposit'     => $request->deposit,
+            'department'  => $request->department,
+            'city'        => $request->city,
+        ]);
+
+        $product->save();
+
+        return redirect()->route('products.index')
+            ->with('success', 'Producto actualizado');
+    }
+
+    public function destroy(Product $product)
+    {
+        if ($product->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $product->delete();
+
+        return redirect()->back()
+            ->with('success', 'Producto eliminado');
     }
 }
