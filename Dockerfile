@@ -66,4 +66,6 @@ RUN touch .env \
 
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+COPY docker/start.sh /start.sh
+RUN chmod +x /start.sh
+CMD ["/start.sh"]
