@@ -42,3 +42,4 @@ class LandlordRentalRequestController extends Controller
             : 'Solicitud rechazada correctamente.'
     );
 }
+}
