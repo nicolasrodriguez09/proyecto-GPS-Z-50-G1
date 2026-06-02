@@ -19,31 +19,26 @@ class LandlordRentalRequestController extends Controller
     }
 
     public function update(Request $request, Transaction $transaction)
-    {
-        // Validar acción
-        $request->validate([
-            'action' => 'required|in:approved,rejected',
-        ]);
+{
+    $request->validate([
+        'action' => 'required|in:aprobada,rechazada',
+    ]);
 
-        // Verificar que la solicitud pertenece al arrendador
-        if ($transaction->landlord_id !== auth()->id()) {
-            abort(403);
-        }
-
-        // SOLO bloquear si ya fue aprobada o rechazada
-        if ($transaction->status === 'approved' || $transaction->status === 'rejected') {
-            return back()->with('error', 'Esta solicitud ya fue procesada.');
-        }
-
-        // Actualizar estado
-        $transaction->status = $request->action;
-        $transaction->save();
-
-        return back()->with(
-            'success',
-            $request->action === 'approved'
-                ? 'Solicitud aprobada correctamente.'
-                : 'Solicitud rechazada correctamente.'
-        );
+    if ($transaction->landlord_id !== auth()->id()) {
+        abort(403);
     }
+
+    if ($transaction->status === 'aprobada' || $transaction->status === 'rechazada') {
+        return back()->with('error', 'Esta solicitud ya fue procesada.');
+    }
+
+    $transaction->status = $request->action;
+    $transaction->save();
+
+    return back()->with(
+        'success',
+        $request->action === 'aprobada'
+            ? 'Solicitud aprobada correctamente.'
+            : 'Solicitud rechazada correctamente.'
+    );
 }

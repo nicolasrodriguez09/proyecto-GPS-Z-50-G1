@@ -652,7 +652,7 @@
                                 {{-- Imagen del producto --}}
                                 @if ($transaction->product && $transaction->product->image)
                                     <img
-                                        src="{{ Storage::url($transaction->product->image) }}"
+                                        src="{{ Str::startsWith($transaction->product->image, 'http') ? $transaction->product->image : Storage::url($transaction->product->image) }}"
                                         alt="{{ $transaction->item_name }}"
                                         class="sol-product-img"
                                     >
